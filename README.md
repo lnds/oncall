@@ -1,5 +1,8 @@
 # Oncall
 
+> **Repositorio plantilla para los cursos de [Eduardo Díaz](https://ediaz.dev).** Es el proyecto
+> sobre el que se trabaja en clases: crea tu copia con **Use this template** y trabaja en ella.
+
 Plataforma de gestión de incidentes: registra los servicios en producción y sus turnos de
 guardia, abre incidentes, avisa a quien está de guardia, sigue cada incidente hasta resolverlo y
 guarda el post-mortem.
