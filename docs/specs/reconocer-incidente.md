@@ -70,8 +70,9 @@ Característica: Reconocer un incidente
 ## Cómo se verifica
 
 ```bash
-make test-incidents
-make lint
+cd services/incidents
+uv run pytest
+uv run ruff check . && uv run ruff format --check .
 ```
 
 Y a mano: `make up && make seed`, abrir `http://localhost:8080`, entrar a un incidente abierto,
