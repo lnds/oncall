@@ -130,6 +130,30 @@ def test_invalid_transition_is_rejected(client, new_incident):
     assert response.status_code == 409
 
 
+def test_mitigated_cannot_go_back_to_open(client, new_incident):
+    incident_id = new_incident()
+    client.patch(f"/incidents/{incident_id}", json={"status": "investigating"})
+    client.patch(f"/incidents/{incident_id}", json={"status": "mitigated"})
+    response = client.patch(f"/incidents/{incident_id}", json={"status": "open"})
+    assert response.status_code == 409
+
+
+def test_same_status_is_rejected(client, new_incident):
+    incident_id = new_incident()
+    client.patch(f"/incidents/{incident_id}", json={"status": "investigating"})
+    response = client.patch(f"/incidents/{incident_id}", json={"status": "investigating"})
+    assert response.status_code == 409
+
+
+def test_reopen_clears_resolved_at(client, new_incident):
+    incident_id = new_incident()
+    client.patch(f"/incidents/{incident_id}", json={"status": "resolved"})
+    client.patch(f"/incidents/{incident_id}", json={"status": "investigating"})
+    incident = client.get(f"/incidents/{incident_id}").json()
+    assert incident["status"] == "investigating"
+    assert incident["resolved_at"] is None
+
+
 def test_unknown_status_is_rejected(client, new_incident):
     response = client.patch(f"/incidents/{new_incident()}", json={"status": "closed"})
     assert response.status_code == 400

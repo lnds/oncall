@@ -49,7 +49,5 @@ similar), con reintentos si el destino no responde.
 
 Llegaron por el canal de soporte. Nadie los ha investigado.
 
-- «Reabrí un incidente de checkout y en el panel aparece con la hora de resolución anterior,
-  aunque sigue abierto.»
 - «El domingo era mi último día de turno, hubo un SEV2 y no me llegó nada.»
 - «A veces el aviso le llega a alguien que no está de guardia esa semana.»

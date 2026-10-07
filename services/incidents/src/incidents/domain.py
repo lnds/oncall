@@ -17,7 +17,7 @@ class Status(StrEnum):
 TRANSITIONS: dict[Status, frozenset[Status]] = {
     Status.OPEN: frozenset({Status.INVESTIGATING, Status.RESOLVED}),
     Status.INVESTIGATING: frozenset({Status.MITIGATED, Status.RESOLVED}),
-    Status.MITIGATED: frozenset({Status.OPEN, Status.INVESTIGATING, Status.RESOLVED}),
+    Status.MITIGATED: frozenset({Status.INVESTIGATING, Status.RESOLVED}),
     Status.RESOLVED: frozenset({Status.INVESTIGATING}),
 }
 
@@ -73,9 +73,7 @@ def is_valid_severity(severity: int) -> bool:
 
 
 def can_transition(current: Status, target: Status) -> bool:
-    # Repetir el estado actual no cambia nada; se acepta para que los reintentos
-    # del cliente sean idempotentes.
-    return current == target or target in TRANSITIONS[current]
+    return target in TRANSITIONS[current]
 
 
 def check_transition(current: Status, target: Status) -> None:
@@ -87,7 +85,7 @@ def resolved_at_after(current: datetime | None, target: Status, now: datetime) -
     """El `resolved_at` que corresponde después de pasar a `target`."""
     if target == Status.RESOLVED:
         return now
-    return current
+    return None
 
 
 def can_write_postmortem(incident: Incident) -> bool:

@@ -66,7 +66,7 @@ document.querySelectorAll('.modal').forEach(modal => {
 
 async function loadServiceOptions() {
   const services = await api('/catalog/services');
-  const html = services.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  const html = services.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
   document.getElementById('incident-service-select').innerHTML = html;
 }
 
@@ -84,16 +84,16 @@ async function loadIncidents() {
     <div class="card" onclick="showIncident(${i.id})">
       <div class="card-top">
         <div>
-          <div class="card-title">${i.title}</div>
+          <div class="card-title">${esc(i.title)}</div>
           <div class="card-meta">
-            <span>${i.service_name}</span>
+            <span>${esc(i.service_name)}</span>
             <span>${formatTime(i.started_at)}</span>
             ${i.resolved_at ? `<span>Duración: ${duration(i.started_at, i.resolved_at)}</span>` : ''}
           </div>
         </div>
         <div style="display: flex; gap: 0.5rem">
           <span class="badge badge-sev${i.severity}">SEV${i.severity}</span>
-          <span class="badge badge-${i.status}">${i.status}</span>
+          <span class="badge badge-${esc(i.status)}">${esc(i.status)}</span>
         </div>
       </div>
     </div>
@@ -128,14 +128,14 @@ async function showIncident(id) {
     <div class="detail-header">
       <div class="detail-badges">
         <span class="badge badge-sev${incident.severity}">SEV${incident.severity}</span>
-        <span class="badge badge-${incident.status}">${incident.status}</span>
+        <span class="badge badge-${esc(incident.status)}">${esc(incident.status)}</span>
       </div>
-      <h2>${incident.title}</h2>
+      <h2>${esc(incident.title)}</h2>
       <div class="detail-meta">
-        <div>Servicio: <strong>${incident.service_name}</strong></div>
+        <div>Servicio: <strong>${esc(incident.service_name)}</strong></div>
         <div>Inicio: ${formatTime(incident.started_at)}</div>
         ${incident.resolved_at ? `<div>Resuelto: ${formatTime(incident.resolved_at)} (${duration(incident.started_at, incident.resolved_at)})</div>` : ''}
-        <div>Creado por: ${incident.created_by}</div>
+        <div>Creado por: ${esc(incident.created_by)}</div>
       </div>
       <div class="detail-actions">
         ${incident.status !== 'resolved' ? `<button class="btn btn-primary btn-sm" onclick="showUpdateModal(${incident.id})">Actualizar</button>` : ''}
@@ -147,8 +147,8 @@ async function showIncident(id) {
       ${incident.timeline.map(t => `
         <div class="timeline-item">
           <div class="timeline-time">${formatTime(t.timestamp)}</div>
-          <div class="timeline-author">${t.author}</div>
-          <div class="timeline-message">${t.message}</div>
+          <div class="timeline-author">${esc(t.author)}</div>
+          <div class="timeline-message">${esc(t.message)}</div>
         </div>
       `).join('')}
     </div>
@@ -193,15 +193,15 @@ async function loadPostmortems() {
     <div class="card" onclick="showPostmortem(${pm.id})">
       <div class="card-top">
         <div>
-          <div class="card-title">${pm.incident_title}</div>
+          <div class="card-title">${esc(pm.incident_title)}</div>
           <div class="card-meta">
-            <span>${pm.service_name}</span>
+            <span>${esc(pm.service_name)}</span>
             <span>SEV${pm.severity}</span>
             <span>${formatTime(pm.created_at)}</span>
           </div>
         </div>
       </div>
-      <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">${pm.summary.substring(0, 150)}...</p>
+      <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim)">${esc(pm.summary.substring(0, 150))}...</p>
     </div>
   `).join('');
 }
@@ -217,17 +217,17 @@ async function showPostmortem(id) {
         <span class="badge badge-sev${pm.severity}">SEV${pm.severity}</span>
         <span class="badge badge-resolved">POST-MORTEM</span>
       </div>
-      <h2>${pm.incident_title}</h2>
+      <h2>${esc(pm.incident_title)}</h2>
       <div class="detail-meta">
-        <div>Servicio: <strong>${pm.service_name}</strong></div>
+        <div>Servicio: <strong>${esc(pm.service_name)}</strong></div>
         <div>Publicado: ${formatTime(pm.created_at)}</div>
       </div>
     </div>
-    <div class="pm-section"><h4>Resumen</h4><p>${pm.summary}</p></div>
-    <div class="pm-section"><h4>Causa raíz</h4><p>${pm.root_cause}</p></div>
-    <div class="pm-section"><h4>Impacto</h4><p>${pm.impact}</p></div>
-    <div class="pm-section"><h4>Acciones a tomar</h4><p>${pm.action_items}</p></div>
-    ${pm.lessons ? `<div class="pm-section"><h4>Lecciones aprendidas</h4><p>${pm.lessons}</p></div>` : ''}
+    <div class="pm-section"><h4>Resumen</h4><p>${esc(pm.summary)}</p></div>
+    <div class="pm-section"><h4>Causa raíz</h4><p>${esc(pm.root_cause)}</p></div>
+    <div class="pm-section"><h4>Impacto</h4><p>${esc(pm.impact)}</p></div>
+    <div class="pm-section"><h4>Acciones a tomar</h4><p>${esc(pm.action_items)}</p></div>
+    ${pm.lessons ? `<div class="pm-section"><h4>Lecciones aprendidas</h4><p>${esc(pm.lessons)}</p></div>` : ''}
   `;
 }
 
@@ -243,6 +243,13 @@ async function createPostmortem(e) {
 }
 
 // --- Helpers ---
+
+// Todo texto que viene del servidor pasa por aquí antes de entrar a innerHTML.
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+}
 
 function formatTime(iso) {
   if (!iso) return '';
