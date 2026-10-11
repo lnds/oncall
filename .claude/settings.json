@@ -1,3 +1,28 @@
 {
-  "worktree": { "baseRef": "head" }
+  "worktree": { "baseRef": "head" },
+  "permissions": {
+    "allow": [
+      "Bash(uv run pytest *)",
+      "Bash(uv run ruff *)",
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(go test *)",
+      "Bash(go vet *)",
+      "Bash(gofmt -l *)",
+      "Bash(make check)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(uv add *)",
+      "Bash(npm install *)",
+      "Bash(go get *)",
+      "Bash(docker compose down *)",
+      "Bash(make reset)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)"
+    ]
+  }
 }
