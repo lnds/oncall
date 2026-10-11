@@ -1,7 +1,7 @@
 ---
 name: verificar
 description: Corre el lint y las pruebas de los servicios de Oncall que cambiaron en la rama y
-  reporta la salida. Úsala antes de dar una tarea por terminada o de hacer commit.
+  muestra el resultado. Úsala antes de dar una tarea por terminada o de hacer commit.
 allowed-tools: Bash(git status *), Bash(git diff *), Bash(uv run *), Bash(npm run lint), Bash(npm test), Bash(go vet *), Bash(go test *), Bash(gofmt -l *)
 ---
 
@@ -22,7 +22,7 @@ Archivos que cambiaron respecto de `main`:
    | `notifications` | `go vet ./... && gofmt -l .` | `go test ./...` |
 
    `gofmt -l .` no debe listar ningún archivo.
-3. No corrijas nada. Si algo falla, reporta y detente.
+3. No corrijas nada. Si algo falla, informa y detente.
 
 Responde solo con esto:
 

@@ -24,7 +24,7 @@ de datos.
 | `services/notifications` | `go vet ./... && gofmt -l .` (no debe listar nada) | `go test ./...` |
 
 `make check` corre todo, igual que la CI. Una tarea no está terminada hasta que el lint y las
-pruebas del servicio pasan, y el reporte incluye su salida.
+pruebas del servicio pasan, y el informe final incluye su salida.
 
 ## Reglas
 

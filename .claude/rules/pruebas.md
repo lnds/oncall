@@ -11,4 +11,4 @@ paths:
 - El tiempo se controla con el reloj falso de cada servicio, nunca con esperas.
 - Cada criterio de aceptación de la spec tiene al menos una prueba que lo nombra.
 - Una prueba que falla no se borra ni se debilita para que pase: se arregla el código o se
-  reporta que la prueba está mal, con el motivo.
+  informa que la prueba está mal, con el motivo.
