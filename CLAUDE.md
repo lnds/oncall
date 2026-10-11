@@ -35,7 +35,13 @@ pruebas del servicio pasan, y el reporte incluye su salida.
 - No agregues dependencias sin preguntar.
 - No reformatees ni refactorices lo que la tarea no pide.
 
-## Commits
+## Reglas por tema
 
-En español, en una línea que diga qué cambia. Sin `Co-Authored-By` ni ninguna atribución a
-herramientas.
+Viven en `.claude/rules/`. Las que tienen `paths` se cargan solo al tocar esos archivos.
+
+- `git.md`: commits y ramas. Siempre.
+- `pruebas.md`: al tocar `services/*/tests/`.
+- `migraciones.md`: al tocar `services/*/migrations/`.
+
+El procedimiento para verificar una rama está en la skill `verificar`; los permisos, en
+`.claude/settings.json`.
