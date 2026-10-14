@@ -1,7 +1,10 @@
 {
-  "worktree": { "baseRef": "head" },
+  "worktree": {
+    "baseRef": "head"
+  },
   "permissions": {
     "allow": [
+      "Bash(gh pr view *)",
       "Bash(uv run pytest *)",
       "Bash(uv run ruff *)",
       "Bash(npm test)",
@@ -13,6 +16,7 @@
     ],
     "ask": [
       "Bash(git push *)",
+      "Bash(gh pr create *)",
       "Bash(uv add *)",
       "Bash(npm install *)",
       "Bash(go get *)",
@@ -22,7 +26,43 @@
     "deny": [
       "Read(**/.env)",
       "Bash(git push --force *)",
-      "Bash(git push -f *)"
+      "Bash(git push -f *)",
+      "mcp__github__merge_pull_request"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/proteger-migraciones.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/formatear.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pruebas-al-terminar.sh",
+            "timeout": 300
+          }
+        ]
+      }
     ]
   }
 }

@@ -45,3 +45,10 @@ Viven en `.claude/rules/`. Las que tienen `paths` se cargan solo al tocar esos a
 
 El procedimiento para verificar una rama está en la skill `verificar`; los permisos, en
 `.claude/settings.json`.
+
+## Lo que corre solo
+
+Los hooks de `.claude/hooks/` se ejecutan sin que nadie los pida: formatean cada archivo Python o Go
+que se edita, bloquean la edición de una migración que ya está en `main` y no dejan cerrar una
+tarea mientras fallen las pruebas de un servicio que cambió. Si uno te bloquea, corrige la causa;
+no lo esquives. `/pr` abre el pull request de la rama.
